@@ -1,0 +1,51 @@
+---
+
+dev_env:
+  hosts:
+    xenial:
+      ansible_host: 192.168.192.116
+      ansible_user: vagrant
+    bionic:
+      ansible_host: 192.168.192.118
+      ansible_user: vagrant
+    focal:
+      ansible_host: 192.168.192.120
+      ansible_user: vagrant
+    leap150:
+      ansible_host: 192.168.192.152
+      ansible_user: vagrant
+    leap151:
+      ansible_host: 192.168.192.152
+      ansible_user: vagrant
+    leap152:
+      ansible_host: 192.168.192.152
+      ansible_user: vagrant
+    leap153:
+      ansible_host: 192.168.192.153
+      ansible_user: vagrant
+
+ubuntu_vms:
+  hosts:
+    xenial:
+    bionic:
+    focal:
+
+opensuse_vms:
+  hosts:
+    leap150:
+    leap151:
+    leap152:
+    leap153:
+
+python:
+  hosts:
+    leap150:
+    leap151:
+
+python3:
+  hosts:
+    xenial:
+    bionic:
+    focal:
+    leap152:
+    leap153:

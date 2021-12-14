@@ -1,0 +1,37 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  tasks:
+
+  - name: Dynamically determine which nodes are running if needed
+    block:
+
+      - name: Try to ICMP ping all defined hosts
+        ansible.builtin.command: "ping -c 1 -w 1 {{ hostvars[item].ansible_host }}"
+        failed_when: false
+        register: ping_result
+        loop: "{{ groups.dev_env }}"
+
+      - name: Record pingable hosts in persistent running_hosts
+        ansible.builtin.set_fact:
+          cacheable: true
+          running_hosts: >-
+            {{ ping_result.results | selectattr('rc', 'equalto', 0) |
+               map(attribute='item') | list }}
+
+    when: running_hosts is not defined
+
+  - name: Dynamically define running group is not already defined
+    block:
+
+      - name: Dynamically define 'running' group
+        ansible.builtin.add_host:
+          groups: running
+          hostname: "{{ item }}"
+          inventory_dir: "{{ hostvars[item].inventory_dir }}"
+        loop: "{{ running_hosts }}"
+        loop_control:
+          label: "{{ item }}"
+
+    when: "'running' not in groups"

@@ -1,0 +1,46 @@
+#
+# Vagrant Settings
+#
+memory: 4096
+cpus: 2
+
+# Vagrant tweaks - workarounds for environment and box
+# idiosyncracies
+tweaks:
+      
+  # Sometimes the vagrant management MTU is incorrectly set as 1500
+  # even if the host MTU size is less; use this setting to set the
+  # correct MTU size (requires vagrant-libvirt >= 0.5)
+  #management_network_mtu: 1400
+
+  # Maintainers of some boxes hardcode specific DNS providers so
+  # so we need to fix the generated netplan settings to use DHCP
+  # provided ones.
+  fix_netplan_dns:
+    boxes:
+      - generic/ubuntu1804
+      - generic/ubuntu2004
+
+  # Maintainers of some boxes hardcode specific DNS providers so
+  # so we need to fix the generated netplan settings to use DHCP
+  # provided ones.
+  fix_interfaces_dns:
+    boxes:
+      - generic/ubuntu1604
+
+#
+# SSH
+#
+ssh:
+  pub_keys:
+    - file: ~/.ssh/id_rsa.pub
+
+#
+# Fact Caching
+#
+fact_caching:
+  plugin: ansible.builtin.jsonfile
+  prefix: async_test_fact
+  timeout: 86400
+  uri: /tmp
+

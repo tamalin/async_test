@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ansible_dir="$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")"
+vagrant_master_inv="${ansible_dir}/../.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory"
+vagrant_inv="${ansible_dir}/vagrant_ansible_inventory"
+
+if [[ ! -L "${vagrant_inv}" ]]
+then
+    ln -s -T "${vagrant_master_inv#${ansible_dir}/}" "${vagrant_inv}"
+fi
+
+ANSIBLE_DEBUG=0 ansible-inventory -i "${vagrant_inv}" "${@}"

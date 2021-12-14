@@ -1,0 +1,21 @@
+---
+
+- ansible.builtin.import_playbook: define_running_group.yml
+
+- hosts: running
+  gather_facts: false
+  tasks:
+
+  - name: Fail if async test job id is not defined
+    ansible.builtin.fail:
+      msg: "No running async test background job defined!"
+    when: async_test.job_id is not defined
+
+  - name: Check status of backrgound job
+    ansible.builtin.async_status:
+      jid: "{{ async_test.job_id }}"
+    register: async_job_status_check_result
+
+  - name: Report status of background job
+    ansible.builtin.debug:
+      var: async_job_status_check_result

@@ -1,0 +1,28 @@
+---
+
+- ansible.builtin.import_playbook: define_running_group.yml
+
+- hosts: running
+  gather_facts: false
+  tasks:
+
+  - name: Start background operation asynchronously
+    ansible.builtin.command: sleep 30
+    async: 3600
+    poll: 0
+    register: async_sleep_result
+
+  - name: Save background operation job id as persistent fact
+    ansible.builtin.set_fact:
+      cacheable: true
+      # Once a variable is defined it cannot be easily deleted/unset
+      # so instead of recording the job id in a top-level variable
+      # we save it as an element in a dictionary allowing is to more
+      # easily delete/unset it by removing the key, or redefining
+      # the dictionary.
+      async_test:
+        job_id: "{{ async_sleep_result.ansible_job_id }}"
+
+  - name: Report background job id
+    ansible.builtin.debug:
+      var: async_test.job_id

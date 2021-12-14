@@ -1,0 +1,4 @@
+---
+
+ssh_private_key: "{{ role_path }}/files/id_rsa"
+ssh_public_key: "{{ ssh_private_key }}.pub"

@@ -1,0 +1,4 @@
+ansible.cfg
+ansible/vagrant_ansible_inventory
+.vagrant
+/settings.yml

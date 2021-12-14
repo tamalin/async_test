@@ -1,0 +1,31 @@
+---
+
+- name: setup-ssh | main | Generate SSH Keypair for {{ ansible_user_id }} account
+  community.crypto.openssh_keypair:
+    path: '~/.ssh/id_rsa'
+    size: 4096
+    type: rsa
+
+- name: setup-ssh | main | Add public keys as an authorized keys
+  block:
+    - name: setup-ssh | main | Processing specified public key files
+      ansible.posix.authorized_key:
+        key: "{{ lookup('file', item.file) }}"
+        user: "{{ ansible_user }}"
+        state: "present"
+      loop: "{{ ssh.pub_keys }}"
+      when:
+        - item.file is defined
+
+    - name: setup-ssh | main | Processing specified public key content
+      ansible.posix.authorized_key:
+        key: "{{ item.content }}"
+        user: "{{ ansible_user }}"
+        state: "present"
+      loop: "{{ ssh.pub_keys }}"
+      when:
+        - item.content is defined
+  when:
+    - ssh is defined
+    - ssh.pub_keys is defined
+

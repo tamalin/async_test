@@ -1,0 +1,6 @@
+---
+- hosts: all
+  roles:
+    - setup-ssh
+  tags:
+    - ssh

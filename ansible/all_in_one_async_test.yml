@@ -1,0 +1,7 @@
+---
+
+- ansible.builtin.import_playbook: start_background_job.yml
+
+- ansible.builtin.import_playbook: check_background_job.yml
+
+- ansible.builtin.import_playbook: wait_for_background_job_completion.yml
